@@ -22,10 +22,11 @@ layers = 3
 video = cv2.VideoWriter(outputFile,-1,fps,(width,height))
 
 for fileName in f:
-    img = cv2.imread(path+"\\"+fileName)
-    #cv2.imshow('image',img)
-    #cv2.waitKey(0)
-    video.write(img)
+    if(not(len(fileName)<5 or fileName[-4:]!=".jpg")):
+        img = cv2.imread(path+"\\"+fileName)
+        #cv2.imshow('image',img)
+        #cv2.waitKey(0)
+        video.write(img)
 
 video.release()
 print "Done!"

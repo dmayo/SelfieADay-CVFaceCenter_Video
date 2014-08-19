@@ -18,63 +18,62 @@ for (dirpath, dirnames, filenames) in walk(path):
     break
 
 for fileName in f:
-    if(len(fileName)<5 or fileName[-4:]!=".jpg"):
-        break
-    img = cv2.imread(path+"\\"+fileName)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.1, 5, 0, (200,200))
-    maxWidth = 0
-    maxHeight = 0
-    maxFace = -1
-    
-    #find biggest face
-    for i in range(len(faces)):
-        (x,y,w,h) = faces[i]
-        if (w*h > maxWidth*maxHeight):
-            maxWidth = x
-            maxHeight = h
-            maxFace = i
-    
-    if(maxFace>=0):
-        face = faces[maxFace]    
-        (x,y,w,h) = face
-        #draw boxes
-        '''
-        cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = img[y:y+h, x:x+w]
-        '''
-        #resize image
-        startX, startY =0,0
-        centerX = x+w/2
-        centerY = y+h/2
-        endY, endX  = img.shape[:2]
+    if(not(len(fileName)<5 or fileName[-4:]!=".jpg")):
+        img = cv2.imread(path+"\\"+fileName)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.1, 5, 0, (200,200))
+        maxWidth = 0
+        maxHeight = 0
+        maxFace = -1
+        
+        #find biggest face
+        for i in range(len(faces)):
+            (x,y,w,h) = faces[i]
+            if (w*h > maxWidth*maxHeight):
+                maxWidth = x
+                maxHeight = h
+                maxFace = i
+        
+        if(maxFace>=0):
+            face = faces[maxFace]    
+            (x,y,w,h) = face
+            #draw boxes
+            '''
+            cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = img[y:y+h, x:x+w]
+            '''
+            #resize image
+            startX, startY =0,0
+            centerX = x+w/2
+            centerY = y+h/2
+            endY, endX  = img.shape[:2]
 
-        if(centerX>endX/2):
-            startX = centerX - (endX-centerX)
-        else:
-            endX = centerX*2
+            if(centerX>endX/2):
+                startX = centerX - (endX-centerX)
+            else:
+                endX = centerX*2
+                
+            if(centerY>endY/2):
+                startY = centerY - (endY-centerY)
+            else:
+                endY = centerY*2
             
-        if(centerY>endY/2):
-            startY = centerY - (endY-centerY)
-        else:
-            endY = centerY*2
-        
-        height = endY - startY
-        width = endX - startX
-        #keep aspect ratio
-        if(height/720.0>width/1080.0):
-            startY = centerY - (width/1080.0*720.0)/2
-            endY = centerY + (width/1080.0*720.0)/2
-        else:
-            startX = centerX - (height/720.0*1080.0)/2
-            endX = centerX + (height/720.0*1080.0)/2
-        
-        crop_img = img[startY:endY, startX:endX]
-        img = crop_img
-        
-        resize_img = cv2.resize(img, (1080, 720)) 
-        img = resize_img
+            height = endY - startY
+            width = endX - startX
+            #keep aspect ratio
+            if(height/720.0>width/1080.0):
+                startY = centerY - (width/1080.0*720.0)/2
+                endY = centerY + (width/1080.0*720.0)/2
+            else:
+                startX = centerX - (height/720.0*1080.0)/2
+                endX = centerX + (height/720.0*1080.0)/2
+            
+            crop_img = img[startY:endY, startX:endX]
+            img = crop_img
+            
+            resize_img = cv2.resize(img, (1080, 720)) 
+            img = resize_img
         
     else:
         print "no face in "+fileName
@@ -85,8 +84,8 @@ for fileName in f:
         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
     '''
     #show images
-    cv2.imshow('image',img)
-    cv2.waitKey(0)
+    #cv2.imshow('image',img)
+    #cv2.waitKey(0)
     #output images
     cv2.imwrite(outPath+"\\"+fileName,img)
     #time.sleep(3)

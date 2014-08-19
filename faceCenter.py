@@ -7,7 +7,7 @@ face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 
 #input path
-path='C:\Users\David\Dropbox\David-Christian\pictures_face'
+path='C:\Users\David\Dropbox\David-Christian\unedited_full_set'
 
 #output path
 outPath='photos'
@@ -72,17 +72,18 @@ for fileName in f:
             crop_img = img[startY:endY, startX:endX]
             img = crop_img
             
-            resize_img = cv2.resize(img, (1080, 720)) 
-            img = resize_img
         
     else:
         print "no face in "+fileName
-        
+
     '''
     eyes = eye_cascade.detectMultiScale(roi_gray)
     for (ex,ey,ew,eh) in eyes:
         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
     '''
+    #resize image
+    resize_img = cv2.resize(img, (1080, 720)) 
+    img = resize_img
     #show images
     #cv2.imshow('image',img)
     #cv2.waitKey(0)

@@ -6,7 +6,11 @@ from os import walk
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 
-path='photos'
+#input path
+path='C:\Users\David\Dropbox\David-Christian\pictures_face'
+
+#output path
+outPath='photos'
 
 f = []
 for (dirpath, dirnames, filenames) in walk(path):
@@ -30,21 +34,22 @@ for fileName in f:
             maxWidth = x
             maxHeight = h
             maxFace = i
-    #draw boxes
+    
     if(maxFace>=0):
         face = faces[maxFace]    
         (x,y,w,h) = face
+        #draw boxes
+        '''
         cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
         roi_gray = gray[y:y+h, x:x+w]
         roi_color = img[y:y+h, x:x+w]
-        
+        '''
+        #resize image
         startX, startY =0,0
         centerX = x+w/2
         centerY = y+h/2
         endY, endX  = img.shape[:2]
-        print endX
-        
-        print endY
+
         if(centerX>endX/2):
             startX = centerX - (endX-centerX)
         else:
@@ -57,6 +62,7 @@ for fileName in f:
         
         height = endY - startY
         width = endX - startX
+        #keep aspect ratio
         if(height/720.0>width/1080.0):
             startY = centerY - (width/1080.0*720.0)/2
             endY = centerY + (width/1080.0*720.0)/2
@@ -81,7 +87,7 @@ for fileName in f:
     #show images
     cv2.imshow('image',img)
     cv2.waitKey(0)
+    #output images
+    cv2.imwrite(outPath+"\\"+fileName,img)
     #time.sleep(3)
     cv2.destroyAllWindows()
-    
-
